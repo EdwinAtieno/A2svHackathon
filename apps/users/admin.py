@@ -13,48 +13,35 @@ User = get_user_model()
 
 
 class UserAdmin(DjangoUserAdmin):
-    model = User
     list_display = (
-        "id",
-        "first_name",
-        "middle_name",
-        "last_name",
-        "country",
-        "phone_number",
+        # "id",
         "email",
-        "created_at",
-        "is_superuser",
-    )
-    list_display_links = (
-        "id",
-        "phone_number",
-    )
-    readonly_fields = ("id", "created_at", "updated_at")
-    list_filter = (
-        CreatedAtFilter,
+        "first_name",
+        "last_name",
+        "is_active",
         "is_staff",
         "is_superuser",
-        "is_active",
+        "phone_number",
     )
-    ordering = ("first_name", "last_name")
-    search_fields = USER_SEARCH_FIELDS
-    exclude = ("username", "email", "date_joined")
 
+    list_filter = ("is_staff", "is_superuser")
+    search_fields = ("email", "first_name", "last_name")
+    ordering = ("first_name", "last_name")
     fieldsets = (
         (
             "Personal info",
             {
                 "fields": (
                     "first_name",
-                    "middle_name",
                     "last_name",
                     "password",
+                    "country",
                 )
             },
         ),
         (
             "Contact info",
-            {"fields": ("phone_number", "email", "country")},
+            {"fields": ("email",)},
         ),
         ("Important dates", {"fields": ("last_login",)}),
         (
@@ -68,7 +55,6 @@ class UserAdmin(DjangoUserAdmin):
             },
         ),
     )
-
     add_fieldsets = (
         (
             "Personal info",
@@ -77,15 +63,10 @@ class UserAdmin(DjangoUserAdmin):
                 "fields": (
                     "first_name",
                     "last_name",
-                    "middle_name",
                     "password1",
                     "password2",
                 ),
             },
-        ),
-        (
-            "Contact info",
-            {"fields": ("phone_number", "email", "country")},
         ),
         (
             "Permissions",
