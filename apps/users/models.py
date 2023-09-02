@@ -70,7 +70,7 @@ class User(AbstractBaseUser, PermissionsMixin, IDModel, TimeStampedModel):
 
     email = models.CharField(
         verbose_name=_("Email Address"),
-        max_length=20,
+        max_length=255,
         unique=True,
     )
     is_active = models.BooleanField(
