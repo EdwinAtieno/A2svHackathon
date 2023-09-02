@@ -5,6 +5,18 @@ name = "pypi"
 
 [packages]
 django = "*"
+drf-yasg = "*"
+djangorestframework = "*"
+python-decouple = "*"
+dj-database-url = "*"
+psycopg2-binary = "*"
+whitenoise = "*"
+gunicorn = "*"
+djangorestframework-simplejwt = "*"
+django-import-export = "*"
+django-cors-headers = "*"
+requests = "*"
+celery = "*"
 
 [dev-packages]
 
