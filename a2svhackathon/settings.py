@@ -16,7 +16,7 @@ from typing import List
 
 from dotenv import read_dotenv
 from decouple import config
-import dj_database_url
+# import dj_database_url
 
 # read_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
