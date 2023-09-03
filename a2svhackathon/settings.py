@@ -20,8 +20,9 @@ from decouple import config
 
 # read_dotenv()
 
-DEBUG = config('DEBUG', default=False)
-SECRET_KEY = config('SECRET_KEY')
+# DEBUG = config('DEBUG', default=False)
+DEBUG=True
+# SECRET_KEY = config('SECRET_KEY')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -30,13 +31,14 @@ DB_FAISS_PATH = os.path.join(BASE_DIR, 'vectorstore', 'db_faiss')
 
 # read_dotenv(os.path.join(BASE_DIR, '.env'))
 
-read_dotenv(os.path.join(BASE_DIR, ".env"))
+# read_dotenv(os.path.join(BASE_DIR, ".env"))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config("SECRET_KEY")
+# SECRET_KEY = config("SECRET_KEY")
+SECRET_KEY='Chalo'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG')
