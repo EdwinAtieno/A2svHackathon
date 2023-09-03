@@ -17,7 +17,7 @@ class UserList(generics.ListCreateAPIView):
 
     queryset = User.objects.prefetch_related("groups").all()
     serializer_class = UserSerializer
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
 
 
 class UserDetail(generics.RetrieveUpdateDestroyAPIView):
