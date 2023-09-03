@@ -1,46 +1,49 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 
-
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        self.room_name = self.scope['url_route']['kwargs']['room_name']
-        self.room_group_name = 'chat_%s' % self.room_name
+        if self.scope['user'].is_authenticated:
+            self.room_name = self.scope['user'].email[:5]
+            self.room_group_name = f'chat_{self.room_name}'
 
-        # Join room group
-        await self.channel_layer.group_add(
-            self.room_group_name,
-            self.channel_name
-        )
+            # Join user-specific room group
+            await self.channel_layer.group_add(
+                self.room_group_name,
+                self.channel_name
+            )
 
-        await self.accept()
+            await self.accept()
+        else:
+            await self.close()
 
     async def disconnect(self, close_code):
-        # Leave room group
+        # Leave user-specific room group
         await self.channel_layer.group_discard(
             self.room_group_name,
             self.channel_name
         )
 
-    # Receive message from WebSocket
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
 
-        # Send message to room group
-        await self.channel_layer.group_send(
-            self.room_group_name,
-            {
-                'type': 'chat_message',
-                'message': message
-            }
-        )
+        if self.scope['user'].is_authenticated:
+            # Process financial advice request and send back the advice
+            advice = process_advice_request(self.scope['user'], message)
 
-    # Receive message from room group
+            # Send advice to user-specific room group
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'chat_message',
+                    'message': advice
+                }
+            )
+
     async def chat_message(self, event):
         message = event['message']
 
-        # Send message to WebSocket
         await self.send(text_data=json.dumps({
             'message': message
         }))

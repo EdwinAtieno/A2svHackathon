@@ -104,7 +104,7 @@ ASGI_APPLICATION = "a2svhackathon.asgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-"""DATABASES = {
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.getenv('DB_NAME'),
@@ -113,18 +113,18 @@ ASGI_APPLICATION = "a2svhackathon.asgi.application"
         'HOST': os.getenv('DB_HOST'),
         'PORT': os.getenv('DB_PORT'),
     }
-}"""
+}
 # db_config = dj_database_url.config(default=config("DATABASE_URL"))
 # DATABASES = {"default": db_config}
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.path.join(
-            BASE_DIR, "db.sqlite3"
-        ),  # By default, it uses db.sqlite3 in your project directory.
-    }
-}
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": os.path.join(
+#             BASE_DIR, "db.sqlite3"
+#         ),  # By default, it uses db.sqlite3 in your project directory.
+#     }
+# }
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
