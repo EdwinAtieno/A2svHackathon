@@ -16,12 +16,12 @@ from typing import List
 
 # from dotenv import read_dotenv
 from decouple import config
-# import dj_database_url
+import dj_database_url
 
 # read_dotenv()
 
 # DEBUG = config('DEBUG', default=False)
-DEBUG=True
+DEBUG=False
 # SECRET_KEY = config('SECRET_KEY')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -41,7 +41,7 @@ DB_FAISS_PATH = os.path.join(BASE_DIR, 'vectorstore', 'db_faiss')
 SECRET_KEY='Chalo'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG')
+# DEBUG = os.getenv('DEBUG')
 
 ALLOWED_HOSTS = [
     "127.0.0.1",
@@ -113,17 +113,17 @@ ASGI_APPLICATION = "a2svhackathon.asgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# db_config = dj_database_url.config(default=config("DATABASE_URL"))
+db_config = dj_database_url.config(default=config("DATABASE_URL"))
 # DATABASES = {"default": db_config}
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.sqlite3",
-#         "NAME": os.path.join(
-#             BASE_DIR, "db.sqlite3"
-#         ),  # By default, it uses db.sqlite3 in your project directory.
-#     }
-# }
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": os.path.join(
+            BASE_DIR, "db.sqlite3"
+        ),  # By default, it uses db.sqlite3 in your project directory.
+    }
+}
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
