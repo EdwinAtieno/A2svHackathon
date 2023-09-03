@@ -32,7 +32,7 @@ read_dotenv(os.path.join(BASE_DIR, '.env'))
 SECRET_KEY = config("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = os.getenv('DEBUG')
 
 ALLOWED_HOSTS = [
     "127.0.0.1",
