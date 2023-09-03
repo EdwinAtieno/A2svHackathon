@@ -30,6 +30,7 @@ DB_FAISS_PATH = os.path.join(BASE_DIR, 'vectorstore', 'db_faiss')
 
 # read_dotenv(os.path.join(BASE_DIR, '.env'))
 
+read_dotenv(os.path.join(BASE_DIR, ".env"))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -38,24 +39,26 @@ DB_FAISS_PATH = os.path.join(BASE_DIR, 'vectorstore', 'db_faiss')
 SECRET_KEY = config("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = os.getenv('DEBUG')
 
 ALLOWED_HOSTS = [
     "127.0.0.1",
     ".herokuapp.com",
     "localhost",
+    "http://localhost:5173",
+    "*"
 ]
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
     # third-party imports
     "rest_framework",
     "corsheaders",
@@ -63,10 +66,10 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
     "rest_framework_simplejwt.token_blacklist",
     # ThirdParty
-    'channels',
-    'apps.chat',
-    'apps.users',
-    'apps.authentication',
+    "channels",
+    "apps.chat",
+    "apps.users",
+    "apps.authentication",
 ]
 
 AUTH_USER_MODEL = "users.User"
@@ -83,27 +86,26 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = 'a2svhackathon.urls'
+ROOT_URLCONF = "a2svhackathon.urls"
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': []
-        ,
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = 'a2svhackathon.wsgi.application'
-ASGI_APPLICATION = 'a2svhackathon.asgi.application'
+WSGI_APPLICATION = "a2svhackathon.wsgi.application"
+ASGI_APPLICATION = "a2svhackathon.asgi.application"
 
 
 # Database
@@ -123,9 +125,11 @@ ASGI_APPLICATION = 'a2svhackathon.asgi.application'
 # DATABASES = {"default": db_config}
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'), # By default, it uses db.sqlite3 in your project directory.
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": os.path.join(
+            BASE_DIR, "db.sqlite3"
+        ),  # By default, it uses db.sqlite3 in your project directory.
     }
 }
 # Password validation
@@ -134,9 +138,7 @@ DATABASES = {
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
-        "OPTIONS": {
-            "user_attributes": ["phone_number", "alternate_phone_number"]
-        },
+        "OPTIONS": {"user_attributes": ["phone_number", "email"]},
     },
     {
         "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
@@ -148,7 +150,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = "en-us"
 
 TIME_ZONE = "Africa/Nairobi"
 
@@ -167,7 +169,7 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 REST_FRAMEWORK = {
@@ -210,6 +212,7 @@ SWAGGER_SETTINGS = {
 # CORS settings
 CORS_ALLOWED_ORIGINS: List[str] = []
 CORS_ALLOWED_ORIGIN_REGEXES: List[str] = [
-r"^(http?:\/\/)?((localhost)|(127\.0\.0\.1)):3\d{3}",
+    r"^(http?:\/\/)?((localhost)|(127\.0\.0\.1)):3\d{3}",
+    r"^(http?:\/\/)?((localhost)|(127\.0\.0\.1)):5\d{3}",
 ]
 CORS_URLS_REGEX = r"^/api/.*$"
