@@ -10,7 +10,7 @@ def phone_number_validator(value: str) -> Any:
     """
 
     if re.match(  # noqa W605 type: ignore["return-value"]
-        r"^254[0-9]{9}$", value
+        r"^(?:\+?88)?01[13-9]\d{8}$", value
     ):
         return value
 
