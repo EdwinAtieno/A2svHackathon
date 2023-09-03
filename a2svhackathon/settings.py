@@ -14,15 +14,21 @@ from pathlib import Path
 import os
 from typing import List
 
-from dotenv import read_dotenv
+# from dotenv import read_dotenv
 from decouple import config
 # import dj_database_url
 
 # read_dotenv()
+
+DEBUG = config('DEBUG', default=False)
+SECRET_KEY = config('SECRET_KEY')
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+QUANTIZED_LLAMA_MODEL_PATH = os.path.join(BASE_DIR, 'llama2', 'llama.cpp/models/7B/ggml-model-q4_0.bin')
+DB_FAISS_PATH = os.path.join(BASE_DIR, 'vectorstore', 'db_faiss')
 
-read_dotenv(os.path.join(BASE_DIR, '.env'))
+# read_dotenv(os.path.join(BASE_DIR, '.env'))
 
 
 # Quick-start development settings - unsuitable for production
