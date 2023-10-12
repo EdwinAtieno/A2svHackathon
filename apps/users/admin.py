@@ -18,10 +18,11 @@ class UserAdmin(DjangoUserAdmin):
         "email",
         "first_name",
         "last_name",
+        "phone_number",
         "is_active",
         "is_staff",
         "is_superuser",
-        "phone_number",
+        # "phone_number",
     )
 
     list_filter = ("is_staff", "is_superuser")
@@ -64,6 +65,7 @@ class UserAdmin(DjangoUserAdmin):
                     "first_name",
                     "last_name",
                     "email",
+                    "phone_number",
                     "password1",
                     "password2",
                 ),
