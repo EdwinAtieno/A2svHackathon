@@ -1,6 +1,12 @@
-# build_files.sh
-pip install -r requirements.txt
+#!/usr/bin/env bash
 
-# make migrations
-python3 manage.py migrate
-python3 manage.py collectstatic
+
+echo "Building project packages..."
+python3 -m pip install -r requirements.txt
+
+echo "Migrating Database..."
+python3 manage.py makemigrations --noinput
+python3 manage.py migrate --noinput
+
+echo "Collecting static files..."
+python3 manage.py collectstatic --noinput clear
