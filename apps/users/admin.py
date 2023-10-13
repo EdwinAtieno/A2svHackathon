@@ -3,18 +3,13 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
 
 from apps.admin_filters import CreatedAtFilter
-from apps.users.constants import (
-    USER_SEARCH_FIELDS,
-)
-
-
+from apps.users.constants import USER_SEARCH_FIELDS
 
 User = get_user_model()
 
-
-class UserAdmin(DjangoUserAdmin):
+class CustomUserAdmin(DjangoUserAdmin):
     list_display = (
-        # "id",
+        "id",
         "email",
         "first_name",
         "last_name",
@@ -22,40 +17,19 @@ class UserAdmin(DjangoUserAdmin):
         "is_active",
         "is_staff",
         "is_superuser",
-        # "phone_number",
+    )
+    list_filter = ("is_staff", "is_superuser", CreatedAtFilter)
+    search_fields = USER_SEARCH_FIELDS
+    ordering = ("first_name", "last_name")
+    list_per_page = 25
+
+    fieldsets = (
+        ("Personal info", {"fields": ("first_name", "last_name", "password", "country")}),
+        ("Contact info", {"fields": ("email", "phone_number")}),
+        ("Important dates", {"fields": ("last_login",)}),
+        ("Permissions", {"fields": ("is_active", "is_staff", "is_superuser")}),
     )
 
-    list_filter = ("is_staff", "is_superuser")
-    search_fields = ("email", "first_name", "last_name")
-    ordering = ("first_name", "last_name")
-    fieldsets = (
-        (
-            "Personal info",
-            {
-                "fields": (
-                    "first_name",
-                    "last_name",
-                    "password",
-                    "country",
-                )
-            },
-        ),
-        (
-            "Contact info",
-            {"fields": ("email",)},
-        ),
-        ("Important dates", {"fields": ("last_login",)}),
-        (
-            "Permissions",
-            {
-                "fields": (
-                    "is_active",
-                    "is_staff",
-                    "is_superuser",
-                )
-            },
-        ),
-    )
     add_fieldsets = (
         (
             "Personal info",
@@ -74,14 +48,9 @@ class UserAdmin(DjangoUserAdmin):
         (
             "Permissions",
             {
-                "fields": (
-                    "is_active",
-                    "is_staff",
-                    "is_superuser",
-                )
+                "fields": ("is_active", "is_staff", "is_superuser"),
             },
         ),
     )
 
-
-admin.site.register(User, UserAdmin)
+admin.site.register(User, CustomUserAdmin)

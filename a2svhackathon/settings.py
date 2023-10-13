@@ -16,7 +16,7 @@ from typing import List
 
 from dotenv import load_dotenv
 import dj_database_url
-from decouple import config
+# from decouple import config
 
 
 # Load environment variables
@@ -102,22 +102,22 @@ ASGI_APPLICATION = "a2svhackathon.asgi.application"
 
 # For Local Production
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': os.environ.get("DB_NAME"),
-#         'USER': os.environ.get("DB_USER"),
-#         'PASSWORD': os.environ.get("DB_PASSWORD"),
-#         'HOST': os.environ.get("DB_HOST"),
-#         'PORT': os.environ.get("DB_PORT"),
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.environ.get("DB_NAME"),
+        'USER': os.environ.get("DB_USER"),
+        'PASSWORD': os.environ.get("DB_PASSWORD"),
+        'HOST': os.environ.get("DB_HOST"),
+        'PORT': os.environ.get("DB_PORT"),
+    }
+}
 
 # For Production
 
-DATABASES = {
-    'default': dj_database_url.config(default=os.environ.get("DATABASE_URL"))
-}
+# DATABASES = {
+#     'default': dj_database_url.config(default=os.environ.get("DATABASE_URL"))
+# }
 
 
 # Password validation
@@ -147,11 +147,11 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
-
 STATIC_URL = "/staticfiles/"
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles", "static")
-STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -186,7 +186,7 @@ SIMPLE_JWT = {
 # Session handling
 
 SESSION_ENGINE = "django.contrib.sessions.backends.db"
-SESSION_COOKIE_NAME = os.environ.get("SESSION_COOKIE_NAME")
+# SESSION_COOKIE_NAME = os.environ.get("SESSION_COOKIE_NAME")
 SESSION_COOKIE_AGE = 3600  # Set the session timeout (in seconds)
 SESSION_SAVE_EVERY_REQUEST = True  # Save the session on every request
 
