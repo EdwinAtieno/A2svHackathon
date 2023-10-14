@@ -54,7 +54,7 @@ sqlparse==0.4.4
 sympy==1.12
 tablib==3.5.0
 tiktoken==0.5.1
-torch==2.1.0+cpu
+torch
 torchaudio==2.1.0+cpu
 torchvision==0.16.0+cpu
 typing_extensions==4.7.1

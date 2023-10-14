@@ -1,5 +1,5 @@
 install:
-	python3 -m pip install -r requirements.pip
+	python3 -m pip install -r requirements.txt
 
 migrate:
 	python3 manage.py makemigrations
