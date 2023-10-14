@@ -6,7 +6,7 @@ migrate:
 	python3 manage.py migrate
 
 serve:
-	python3 manage.py runserver 8001
+	python3 manage.py runserver
 
 super:
 	python3 manage.py createsuperuser

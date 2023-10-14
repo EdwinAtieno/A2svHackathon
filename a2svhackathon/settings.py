@@ -14,41 +14,31 @@ from pathlib import Path
 import os
 from typing import List
 
-# from dotenv import read_dotenv
-from decouple import config
-# import dj_database_url
+from dotenv import load_dotenv
+import dj_database_url
+# from decouple import config
 
-# read_dotenv()
 
-DEBUG = config('DEBUG', default=False)
-SECRET_KEY = config('SECRET_KEY')
-
+# Load environment variables
+load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-QUANTIZED_LLAMA_MODEL_PATH = os.path.join(BASE_DIR, 'llama2', 'llama.cpp/models/7B/ggml-model-q4_0.bin')
-DB_FAISS_PATH = os.path.join(BASE_DIR, 'vectorstore', 'db_faiss')
-
-# read_dotenv(os.path.join(BASE_DIR, '.env'))
-
-read_dotenv(os.path.join(BASE_DIR, ".env"))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config("SECRET_KEY")
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG')
+DEBUG = os.environ.get('DEBUG')
 
 ALLOWED_HOSTS = [
     "127.0.0.1",
-    ".herokuapp.com",
     "localhost",
-    "http://localhost:5173",
-    "*"
+    ".vercel.app",
+    ".now.sh",
 ]
-
 
 # Application definition
 
@@ -107,31 +97,29 @@ TEMPLATES = [
 WSGI_APPLICATION = "a2svhackathon.wsgi.application"
 ASGI_APPLICATION = "a2svhackathon.asgi.application"
 
-
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-"""DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DB_NAME'),
-        'USER': os.getenv('DB_USER'),
-        'PASSWORD': os.getenv('DB_PASSWORD'),
-        'HOST': os.getenv('DB_HOST'),
-        'PORT': os.getenv('DB_PORT'),
-    }
-}"""
-# db_config = dj_database_url.config(default=config("DATABASE_URL"))
-# DATABASES = {"default": db_config}
+# For Local Production
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.path.join(
-            BASE_DIR, "db.sqlite3"
-        ),  # By default, it uses db.sqlite3 in your project directory.
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.environ.get("DB_NAME"),
+        'USER': os.environ.get("DB_USER"),
+        'PASSWORD': os.environ.get("DB_PASSWORD"),
+        'HOST': os.environ.get("DB_HOST"),
+        'PORT': os.environ.get("DB_PORT"),
     }
 }
+
+# For Production
+
+# DATABASES = {
+#     'default': dj_database_url.config(default=os.environ.get("DATABASE_URL"))
+# }
+
+
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
@@ -146,7 +134,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
@@ -158,19 +145,18 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
-
 STATIC_URL = "/staticfiles/"
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
+
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
 
 REST_FRAMEWORK = {
     "DEFAULT_RENDERER_CLASSES": [
@@ -188,7 +174,6 @@ REST_FRAMEWORK = {
     "TEST_REQUEST_DEFAULT_FORMAT": "json",
 }
 
-
 # SimpleJWT settings
 
 SIMPLE_JWT = {
@@ -197,6 +182,14 @@ SIMPLE_JWT = {
     "ROTATE_REFRESH_TOKENS": True,
     "BLACKLIST_AFTER_ROTATION": True,
 }
+
+# Session handling
+
+SESSION_ENGINE = "django.contrib.sessions.backends.db"
+# SESSION_COOKIE_NAME = os.environ.get("SESSION_COOKIE_NAME")
+SESSION_COOKIE_AGE = 3600  # Set the session timeout (in seconds)
+SESSION_SAVE_EVERY_REQUEST = True  # Save the session on every request
+
 
 # Django REST Framework YASG settings
 SWAGGER_SETTINGS = {
@@ -208,6 +201,29 @@ SWAGGER_SETTINGS = {
         },
     }
 }
+
+
+# Logger configuration
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': 'django_db.log',
+        },
+    },
+    'loggers': {
+        'django.db.backends': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
+
 
 # CORS settings
 CORS_ALLOWED_ORIGINS: List[str] = []

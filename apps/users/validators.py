@@ -1,17 +1,12 @@
 import re
-from typing import Any
-
 from django.core.exceptions import ValidationError
 
-
-def phone_number_validator(value: str) -> Any:
+def phone_number_validator(value: str) -> None:
     """
     Validate phone number.
     """
 
-    if re.match(  # noqa W605 type: ignore["return-value"]
-        r"^(?:\+?88)?01[13-9]\d{8}$", value
-    ):
+    if re.match(r"^(?:\+\d{1,3}\s?)?\d{4,15}$", value):
         return value
 
     raise ValidationError("Invalid phone number")
