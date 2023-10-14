@@ -11,4 +11,4 @@ echo "Collecting static files..."
 python3 manage.py collectstatic --noinput
 
 echo "Starting the application..."
-gunicorn a2svhackathon.wsgi:application --bind 0.0.0.0:$PORT
+gunicorn a2svhackathon.wsgi:application --bind 0.0.0.0:8000
