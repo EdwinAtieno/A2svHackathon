@@ -14,9 +14,9 @@ from pathlib import Path
 import os
 from typing import List
 
+from decouple import config
 from dotenv import load_dotenv
 import dj_database_url
-# from decouple import config
 
 
 # Load environment variables
