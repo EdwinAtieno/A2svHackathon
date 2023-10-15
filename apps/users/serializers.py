@@ -17,7 +17,6 @@ class UserSerializer(serializers.ModelSerializer):
     phone_number = serializers.CharField(
         max_length=20,
         validators=[
-            # phone_number_validator,
             UniqueValidator(
                 queryset=User.objects.all(),
                 message="This phonenumber already exists",
@@ -73,6 +72,7 @@ class UserSerializer(serializers.ModelSerializer):
         :param value: password of a user
         :return: a hashed version of the password
         """
+        # Password requirements might be strict; communicate these to users
         if len(value) < 8:
             raise serializers.ValidationError(
                 "Password must be at least 8 characters long."

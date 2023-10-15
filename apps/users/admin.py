@@ -17,6 +17,7 @@ class CustomUserAdmin(DjangoUserAdmin):
         "is_active",
         "is_staff",
         "is_superuser",
+        "last_login",
     )
     list_filter = ("is_staff", "is_superuser", CreatedAtFilter)
     search_fields = USER_SEARCH_FIELDS
@@ -24,7 +25,7 @@ class CustomUserAdmin(DjangoUserAdmin):
     list_per_page = 25
 
     fieldsets = (
-        ("Personal info", {"fields": ("first_name", "last_name", "password", "country")}),
+        ("Personal info", {"fields": ("first_name", "last_name", "country")}),
         ("Contact info", {"fields": ("email", "phone_number")}),
         ("Important dates", {"fields": ("last_login",)}),
         ("Permissions", {"fields": ("is_active", "is_staff", "is_superuser")}),

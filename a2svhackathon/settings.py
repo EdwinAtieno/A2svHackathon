@@ -15,12 +15,12 @@ import os
 from typing import List
 
 # from decouple import config
-# from dotenv import load_dotenv
+from dotenv import load_dotenv
 import dj_database_url
 
 
 # Load environment variables
-# load_dotenv()
+load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -29,7 +29,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # SECRET_KEY = os.getenv('SECRET_KEY')
-SECRET_KEY = 'Chalo'
+SECRET_KEY = 'Hello'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = os.getenv('DEBUG')
@@ -109,24 +109,24 @@ ASGI_APPLICATION = "a2svhackathon.asgi.application"
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': os.getenv("DB_NAME"),
-#         'USER': os.getenv("DB_USER"),
-#         'PASSWORD': os.getenv("DB_PASSWORD"),
-#         'HOST': os.getenv("DB_HOST"),
-#         'PORT': os.getenv("DB_PORT"),
+#         'NAME': os.environ.get("DB_NAME"),
+#         'USER': os.environ.get("DB_USER"),
+#         'PASSWORD': os.environ.get("DB_PASSWORD"),
+#         'HOST': os.environ.get("DB_HOST"),
+#         'PORT': os.environ.get("DB_PORT"),
 #     }
 # }
 
 # For Production
-db_url='postgres://Chalo1996:mUnu3fcIH0Zx@ep-crimson-meadow-52487780.us-east-2.aws.neon.tech/neondb'
-
-DATABASES = {
-    'default': dj_database_url.config(default=db_url)
-}
+db_url='postgres://Kimxons:fr5TWMq4IVtl@ep-lively-bar-58454132.us-east-1.aws.neon.tech/neondb'
 
 # DATABASES = {
-#     'default': dj_database_url.config(default=os.getenv("DATABASE_URL"))
+#     'default': dj_database_url.config(default=db_url)
 # }
+
+DATABASES = {
+    'default': dj_database_url.config(default=os.getenv("DATABASE_URL"))
+}
 
 
 # Password validation
@@ -236,9 +236,9 @@ SWAGGER_SETTINGS = {
 
 # CORS settings
 CORS_ALLOWED_ORIGINS: List[str] = [
-    "https://a2svhackathon-e41ece5c505d.herokuapp.com/",
-    "https://a2sv-hackathon-xi.vercel.app/",
-    "https://fininfo.vercel.app/",
+    "https://a2svhackathon-e41ece5c505d.herokuapp.com",
+    "https://a2sv-hackathon-xi.vercel.app",
+    # "https://fininfo.vercel.app/",
     "https://fininfo.vercel.app",
 ]
 CORS_ALLOWED_ORIGIN_REGEXES: List[str] = [
