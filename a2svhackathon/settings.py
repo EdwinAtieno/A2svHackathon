@@ -14,13 +14,13 @@ from pathlib import Path
 import os
 from typing import List
 
-from dotenv import load_dotenv
-import dj_database_url
 # from decouple import config
+# from dotenv import load_dotenv
+import dj_database_url
 
 
 # Load environment variables
-load_dotenv()
+# load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -28,16 +28,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY')
+# SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = 'Chalo'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG')
+# DEBUG = os.getenv('DEBUG')
+DEBUG = True
 
 ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost",
     ".vercel.app",
     ".now.sh",
+    "*",
 ]
 
 # Application definition
@@ -94,7 +97,8 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "a2svhackathon.wsgi.application"
+# WSGI_APPLICATION = "a2svhackathon.wsgi.application" # Uncomment for dev
+WSGI_APPLICATION = "a2svhackathon.wsgi.app" # Comment for dev
 ASGI_APPLICATION = "a2svhackathon.asgi.application"
 
 # Database
@@ -102,21 +106,26 @@ ASGI_APPLICATION = "a2svhackathon.asgi.application"
 
 # For Local Production
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ.get("DB_NAME"),
-        'USER': os.environ.get("DB_USER"),
-        'PASSWORD': os.environ.get("DB_PASSWORD"),
-        'HOST': os.environ.get("DB_HOST"),
-        'PORT': os.environ.get("DB_PORT"),
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': os.getenv("DB_NAME"),
+#         'USER': os.getenv("DB_USER"),
+#         'PASSWORD': os.getenv("DB_PASSWORD"),
+#         'HOST': os.getenv("DB_HOST"),
+#         'PORT': os.getenv("DB_PORT"),
+#     }
+# }
 
 # For Production
+db_url='postgres://Chalo1996:mUnu3fcIH0Zx@ep-crimson-meadow-52487780.us-east-2.aws.neon.tech/neondb'
+
+DATABASES = {
+    'default': dj_database_url.config(default=db_url)
+}
 
 # DATABASES = {
-#     'default': dj_database_url.config(default=os.environ.get("DATABASE_URL"))
+#     'default': dj_database_url.config(default=os.getenv("DATABASE_URL"))
 # }
 
 
@@ -147,11 +156,11 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles_build", "static")
 STATIC_URL = "/staticfiles/"
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+# STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -186,7 +195,7 @@ SIMPLE_JWT = {
 # Session handling
 
 SESSION_ENGINE = "django.contrib.sessions.backends.db"
-# SESSION_COOKIE_NAME = os.environ.get("SESSION_COOKIE_NAME")
+# SESSION_COOKIE_NAME = os.getenv("SESSION_COOKIE_NAME")
 SESSION_COOKIE_AGE = 3600  # Set the session timeout (in seconds)
 SESSION_SAVE_EVERY_REQUEST = True  # Save the session on every request
 
@@ -205,30 +214,36 @@ SWAGGER_SETTINGS = {
 
 # Logger configuration
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': 'django_db.log',
-        },
-    },
-    'loggers': {
-        'django.db.backends': {
-            'handlers': ['file'],
-            'level': 'DEBUG',
-            'propagate': True,
-        },
-    },
-}
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'handlers': {
+#         'file': {
+#             'level': 'DEBUG',
+#             'class': 'logging.FileHandler',
+#             'filename': 'django_db.log',
+#         },
+#     },
+#     'loggers': {
+#         'django.db.backends': {
+#             'handlers': ['file'],
+#             'level': 'DEBUG',
+#             'propagate': True,
+#         },
+#     },
+# }
 
 
 # CORS settings
-CORS_ALLOWED_ORIGINS: List[str] = []
+CORS_ALLOWED_ORIGINS: List[str] = [
+    "https://a2svhackathon-e41ece5c505d.herokuapp.com/",
+    "https://a2sv-hackathon-xi.vercel.app/",
+    "https://fininfo.vercel.app/",
+    "https://fininfo.vercel.app",
+]
 CORS_ALLOWED_ORIGIN_REGEXES: List[str] = [
     r"^(http?:\/\/)?((localhost)|(127\.0\.0\.1)):3\d{3}",
     r"^(http?:\/\/)?((localhost)|(127\.0\.0\.1)):5\d{3}",
+    "*"
 ]
 CORS_URLS_REGEX = r"^/api/.*$"
