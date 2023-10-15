@@ -14,8 +14,8 @@ from pathlib import Path
 import os
 from typing import List
 
-from decouple import config
-from dotenv import load_dotenv
+# from decouple import config
+# from dotenv import load_dotenv
 import dj_database_url
 
 
@@ -28,10 +28,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY')
+# SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = 'Chalo'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG')
+# DEBUG = os.getenv('DEBUG')
+DEBUG = False
 
 ALLOWED_HOSTS = [
     "127.0.0.1",
@@ -114,10 +116,15 @@ ASGI_APPLICATION = "a2svhackathon.asgi.application"
 # }
 
 # For Production
+db_url='postgres://Chalo1996:mUnu3fcIH0Zx@ep-crimson-meadow-52487780.us-east-2.aws.neon.tech/neondb'
 
 DATABASES = {
-    'default': dj_database_url.config(default=os.getenv("DATABASE_URL"))
+    'default': dj_database_url.config(default=db_url)
 }
+
+# DATABASES = {
+#     'default': dj_database_url.config(default=os.getenv("DATABASE_URL"))
+# }
 
 
 # Password validation
@@ -148,8 +155,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 STATIC_URL = "/staticfiles/"
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'staticfiles')]
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles_build", "staticfiles")
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
