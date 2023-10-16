@@ -9,7 +9,6 @@ from apps.users.validators import phone_number_validator
 
 User = get_user_model()
 
-
 class UserSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(max_length=255)
     middle_name = serializers.CharField(max_length=255, required=False)
@@ -64,14 +63,6 @@ class UserSerializer(serializers.ModelSerializer):
         raise serializers.ValidationError("This email already exists")
 
     def validate_password(self, value: str):
-        """
-        User password validation.
-
-        Hash value passed by user.
-
-        :param value: password of a user
-        :return: a hashed version of the password
-        """
         # Password requirements might be strict; communicate these to users
         if len(value) < 8:
             raise serializers.ValidationError(

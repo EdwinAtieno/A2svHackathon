@@ -6,6 +6,7 @@ from django.contrib.auth.models import (
     Group,
     PermissionsMixin,
 )
+from django.db.models import JSONField 
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
@@ -201,6 +202,7 @@ class User(AbstractBaseUser, PermissionsMixin, IDModel, TimeStampedModel):
 
     age = models.PositiveIntegerField(verbose_name=_("Age"),  default=30)
     dependents = models.PositiveIntegerField(verbose_name=_("Dependents"),  default=3)
+    chat_records = JSONField(verbose_name=_("Chat Records"), default=list)
 
     objects = UserManager()
 

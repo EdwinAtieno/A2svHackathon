@@ -118,7 +118,7 @@ ASGI_APPLICATION = "a2svhackathon.asgi.application"
 # }
 
 # For Production
-db_url='postgres://Kimxons:fr5TWMq4IVtl@ep-lively-bar-58454132.us-east-1.aws.neon.tech/neondb'
+db_url=''
 
 # DATABASES = {
 #     'default': dj_database_url.config(default=db_url)
