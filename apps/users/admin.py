@@ -74,6 +74,8 @@ class CustomUserAdmin(DjangoUserAdmin):
                 "mortgage_balance",
                 "spending_pattern",
                 "risk_tolerance",
+                "loan",
+                "default",
             ),
         }),
     )

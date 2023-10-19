@@ -69,6 +69,18 @@ class User(AbstractBaseUser, PermissionsMixin, IDModel, TimeStampedModel):
         max_length=255,
         unique=True,
     )
+    GENDER_CHOICES = [
+        ('Male', 'Male'),
+        ('Female', 'Female'),
+        ('Other', 'Other'),
+    ]
+    gender = models.CharField(
+        max_length=10,
+        choices=GENDER_CHOICES,
+        verbose_name=_("Gender"),
+        blank=True,
+        null=True
+    )
     is_active = models.BooleanField(
         _("active"),
         default=True,
@@ -200,9 +212,16 @@ class User(AbstractBaseUser, PermissionsMixin, IDModel, TimeStampedModel):
         verbose_name=_("Employment Type"),
         default='Salaried'
     )
+    default=models.BooleanField(default=False) # yes/no
+    loan = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        verbose_name=_("Personal Loan"),
+        default=0.00 
+    )
 
     age = models.PositiveIntegerField(verbose_name=_("Age"),  default=30)
-    dependents = models.PositiveIntegerField(verbose_name=_("Dependents"),  default=3)
+    dependants = models.PositiveIntegerField(verbose_name=_("Dependants"),  default=3)
     marital_status = models.CharField(
         max_length=50,
         choices=[
@@ -213,6 +232,7 @@ class User(AbstractBaseUser, PermissionsMixin, IDModel, TimeStampedModel):
         verbose_name=_("Marital Status"),
         default="single"
     )
+    # Implement this in the chatapp instead
     chat_records = JSONField(verbose_name=_("Chat Records"), default=list)
 
     objects = UserManager()
