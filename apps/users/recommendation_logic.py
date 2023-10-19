@@ -1,7 +1,6 @@
 from datetime import datetime
 
 def recommend_products(
-    account_type,
     monthly_income,
     monthly_expenses,
     savings_balance,

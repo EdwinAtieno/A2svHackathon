@@ -167,6 +167,7 @@ class User(AbstractBaseUser, PermissionsMixin, IDModel, TimeStampedModel):
         default=None
     )
 
+    # Expenses
     spending_pattern = models.CharField(
         max_length=20,
         choices=[
@@ -202,6 +203,16 @@ class User(AbstractBaseUser, PermissionsMixin, IDModel, TimeStampedModel):
 
     age = models.PositiveIntegerField(verbose_name=_("Age"),  default=30)
     dependents = models.PositiveIntegerField(verbose_name=_("Dependents"),  default=3)
+    marital_status = models.CharField(
+        max_length=50,
+        choices=[
+            ("married", "married"),
+            ("single", "single"),
+            ("divorced", "divorced"),
+        ],
+        verbose_name=_("Marital Status"),
+        default="single"
+    )
     chat_records = JSONField(verbose_name=_("Chat Records"), default=list)
 
     objects = UserManager()

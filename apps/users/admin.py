@@ -56,12 +56,13 @@ class CustomUserAdmin(DjangoUserAdmin):
     form = CustomUserAdminForm 
 
     fieldsets = (
-        ("Personal info", {"fields": ("first_name", "last_name", "country")}),
+        ("Personal info", {"fields": ("first_name", "last_name", "country", "age", "dependants","marital_status")}),
         ("Contact info", {"fields": ("email", "phone_number")}),
         ("Important dates", {"fields": ("last_login",)}),
         ("Permissions", {"fields": ("is_active", "is_staff", "is_superuser")}),
         ("Financial info", {
             "fields": (
+                "employment_type",
                 "account_type",
                 "monthly_income",
                 "monthly_expenses",
@@ -73,9 +74,6 @@ class CustomUserAdmin(DjangoUserAdmin):
                 "mortgage_balance",
                 "spending_pattern",
                 "risk_tolerance",
-                "employment_type",
-                "age",
-                "dependents",
             ),
         }),
     )
