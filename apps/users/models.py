@@ -179,29 +179,6 @@ class User(AbstractBaseUser, PermissionsMixin, IDModel, TimeStampedModel):
         default=None
     )
 
-    # Expenses
-    spending_pattern = models.CharField(
-        max_length=20,
-        choices=[
-            ('Low', 'Low'),
-            ('Medium', 'Medium'),
-            ('High', 'High'),
-        ],
-        verbose_name=_("Spending Pattern"),
-        default='Low'
-    )
-
-    risk_tolerance = models.CharField(
-        max_length=20,
-        choices=[
-            ('Low', 'Low'),
-            ('Medium', 'Medium'),
-            ('High', 'High'),
-        ],
-        verbose_name=_("Risk Tolerance"),
-        default='Medium'
-    )
-
     employment_type = models.CharField(
         max_length=50,
         choices=[
@@ -231,6 +208,12 @@ class User(AbstractBaseUser, PermissionsMixin, IDModel, TimeStampedModel):
         ],
         verbose_name=_("Marital Status"),
         default="single"
+    )
+    emergency_fund_bal = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        verbose_name=_("Personal Loan"),
+        default=0.00 
     )
     # Implement this in the chatapp instead
     chat_records = JSONField(verbose_name=_("Chat Records"), default=list)

@@ -21,10 +21,9 @@ def recommend_products(
                 recommendation = 'Given your positive cash flow, consider building an emergency fund and exploring investment options.'
         elif loan_balance > 0:
             recommendation = 'Considering your positive cash flow, it may be a good time to accelerate loan repayments and reduce overall debt.'
-    if spending_pattern == 'High':
+    elif spending_pattern == 'High':
         recommendation = 'Given your high spending pattern, consider reviewing your budget and exploring high-interest savings accounts to maximize returns.'
-    
-    if 'recommendation' not in locals():
+    else:
         recommendation = 'A regular savings account might suit your needs. It\'s essential to regularly review your financial goals and consider diverse options.'
 
     # Log the recommendation in chat history

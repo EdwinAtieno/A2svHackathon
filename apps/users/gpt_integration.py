@@ -43,7 +43,9 @@ def chat_with_customer(
             messages=[
                 {
                     "role": "system", 
-                    "content": "You are a helpful assistant. You are skilled in financial matters and risk assessment to offer financial advise"
+                    "content": "You are a helpful financial advisor. \
+                        You are skilled in financial matters and risk assessment to offer financial advise. \
+                        Also recommend a healthier financial life and products like real estate, bonds, and stocks based on the customer risk tolerance."
                 },
                 {
                     "role": "user", 
