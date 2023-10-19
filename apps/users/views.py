@@ -36,12 +36,16 @@ def analyze_customer(request, customer_id):
     try:
         # Check if the provided ID is a valid uuid
         try:
-            customer_uuid = uuid(customer_id)
+            customer_uuid = uuid.UUID(customer_id)
         except ValueError:
-            raise ValidationError("Invalid customer ID format")
+            return Response({'error': 'Invalid customer ID format'}, status=400)
 
         # Retrieve the customer using the uuid
-        customer = get_object_or_404(User, id=customer_uuid)
+        try:
+            customer = User.objects.get(id=customer_uuid)
+        except User.DoesNotExist:
+            return Response({'error': 'Customer not found'}, status=404)
+        
         serializer = UserSerializer(customer)
 
         prompt = f"Customer with ID {customer_id}: {serializer.data}"
@@ -75,7 +79,9 @@ def analyze_customer(request, customer_id):
         combined_response = f"{response}\n\nBased on your banking data, here's a recommendation: {recommendation}"
 
         return Response({'combined_response': combined_response})
-    except User.DoesNotExist:
-        return Response({'error': 'Customer not found'}, status=404)
+    except ValueError:
+        return Response({'error': 'Invalid customer ID format'}, status=400)
     except ValidationError as e:
         return Response({'error': str(e)}, status=400)
+    except User.DoesNotExist:
+        return Response({'error': 'Customer not found'}, status=404)
