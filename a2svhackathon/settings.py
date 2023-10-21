@@ -118,7 +118,7 @@ ASGI_APPLICATION = "a2svhackathon.asgi.application"
 # }
 
 # For Production
-db_url=''
+# db_url=''
 
 # DATABASES = {
 #     'default': dj_database_url.config(default=db_url)
@@ -172,6 +172,8 @@ REST_FRAMEWORK = {
         "rest_framework.renderers.JSONRenderer",
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ],
     "DEFAULT_PARSER_CLASSES": [
@@ -193,10 +195,9 @@ SIMPLE_JWT = {
 }
 
 # Session handling
-
-SESSION_ENGINE = "django.contrib.sessions.backends.db"
-# SESSION_COOKIE_NAME = os.getenv("SESSION_COOKIE_NAME")
-SESSION_COOKIE_AGE = 3600  # Set the session timeout (in seconds)
+SESSION_ENGINE = "django.contrib.sessions.backends.db"  # Use the database-backed session engine
+SESSION_COOKIE_NAME = "your_session_cookie_name"  # Set a custom name for your session cookie
+SESSION_COOKIE_AGE = 3600  # Set the session timeout (in seconds), here it's 1 hour
 SESSION_SAVE_EVERY_REQUEST = True  # Save the session on every request
 
 

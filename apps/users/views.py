@@ -1,87 +1,99 @@
+import logging
+# from .recommendation_logic import recommend_products
+import uuid
+from datetime import datetime
+from django.http import HttpResponse
+
 from django.contrib.auth import get_user_model
-from rest_framework import generics
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework import generics, status
+from rest_framework.authentication import (BasicAuthentication,
+                                           SessionAuthentication)
+from rest_framework.decorators import api_view, authentication_classes
+from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from django.shortcuts import get_object_or_404
 
 from .gpt_integration import chat_with_customer
-from .recommendation_logic import recommend_products
-import uuid
-from rest_framework.exceptions import ValidationError
-
 from .serializers import UserSerializer
 
 User = get_user_model()
 
 class UserList(generics.ListCreateAPIView):
-    """
-    List all users, or create a new user by admin.
-    """
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
 
 class UserDetail(generics.RetrieveUpdateDestroyAPIView):
-    """
-    Retrieve, update, or delete a user instance.
-    """
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
 
-
-@api_view(['POST'])
 def analyze_customer(request, customer_id):
     try:
-        # Check if the provided ID is a valid uuid
-        try:
-            customer_uuid = uuid.UUID(customer_id)
-        except ValueError:
-            return Response({'error': 'Invalid customer ID format'}, status=400)
-
-        # Retrieve the customer using the uuid
-        try:
-            customer = User.objects.get(id=customer_uuid)
-        except User.DoesNotExist:
-            return Response({'error': 'Customer not found'}, status=404)
-        
+        customer = request.user
         serializer = UserSerializer(customer)
 
-        prompt = f"Customer with ID {customer_id}: {serializer.data}"
+        prompt = f"Customer with ID {customer.id}: {serializer.data}"
 
-        # GPT-3
         try:
             response = chat_with_customer(prompt)
         except GPT3Error as e:
             return Response({'error': f'GPT-3 API error: {str(e)}'}, status=500)
 
-        # Recommendation logic
-        recommendation = recommend_products(
-            account_type=customer.account_type,
-            monthly_income=customer.monthly_income,
-            monthly_expenses=customer.monthly_expenses,
-            savings_balance=customer.savings_balance,
-            loan_balance=customer.loan_balance,
-            credit_card_limit=customer.credit_card_limit,
-            fixed_deposit_balance=customer.fixed_deposit_balance,
-            monthly_deposit=customer.monthly_deposit,
-            dependants=customer.dependants,
-            loan=customer.loan,
-            default=customer.default,
-            mortgage_balance=customer.mortgage_balance,
-            spending_pattern=customer.spending_pattern,
-            age=customer.age,
-            marital_status=customer.marital_status,
+        try:
+            chat_records = generate_recommendation_and_log(customer)
+        except Exception as e:
+            logging.error(f'Error generating recommendations: {str(e)}')
+            return Response({'error': f'Error generating recommendations. Please check the logs for details.'}, status=500)
+
+        combined_response = f"{response}\n\nBased on your banking data, here's a recommendation: {chat_records['recommendation']}"
+        http_response = HttpResponse(combined_response)
+
+        http_response.set_cookie('user_id', str(customer.id))
+
+        return Response({
+            'response': response,
+            'recommendation': chat_records['recommendation'],
+            'combined_response': combined_response,
+            'chat_records': chat_records['chat_records'],
+        })
+    except Exception as e:
+        return Response({'error': str(e)}, status=500)
+
+@csrf_exempt
+def generate_recommendation_and_log(customer):
+    chat_records = []
+    try:
+        prompt = f"Analyzing customer data: {customer}"
+        recommendation = chat_with_customer(prompt)
+
+        chat_records.append({
+            "timestamp": datetime.now().isoformat(),
+            "sender": "system",
+            "message": recommendation
+        })
+
+        additional_info = (
+            'Customize recommendations based on specific account types and customer profiles.\n'
+            'Provide educational information alongside recommendations.\n'
+            'Give the customer additional investment options based on their financial behavior.\n'
         )
 
-        # GPT-3 response and recommendation
-        combined_response = f"{response}\n\nBased on your banking data, here's a recommendation: {recommendation}"
+        chat_records.append({
+            "timestamp": datetime.now().isoformat(),
+            "sender": "system",
+            "message": additional_info
+        })
 
-        return Response({'combined_response': combined_response})
-    except ValueError:
-        return Response({'error': 'Invalid customer ID format'}, status=400)
-    except ValidationError as e:
-        return Response({'error': str(e)}, status=400)
-    except User.DoesNotExist:
-        return Response({'error': 'Customer not found'}, status=404)
+        combined_recommendation = f"{recommendation}\n\nAdditional Considerations:\n{additional_info}"
+
+        return {'recommendation': combined_recommendation, 'chat_records': chat_records}
+    except Exception as e:
+        return {'error': str(e)}
+
+
+#  increasing savings
+#  consolidating loans
+#  adjusting spending patterns
+#  exploring specific financial products based on the customer's financial health and goals. 

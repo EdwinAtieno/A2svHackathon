@@ -37,6 +37,14 @@ def chat_with_customer(
     presence_penalty = presence_penalty or 0
     temperature = temperature or 0.7
 
+# revenue
+# competition
+# data protection
+# financial advice
+# localised built apps according to kenya requirements
+# fraud protection
+# incorporate file upload e.g bank statements for information extraction
+# financial modelling functionality
     try:
         response = openai.ChatCompletion.create(
             model=model,
@@ -45,7 +53,8 @@ def chat_with_customer(
                     "role": "system", 
                     "content": "You are a helpful financial advisor. \
                         You are skilled in financial matters and risk assessment to offer financial advise. \
-                        Also recommend a healthier financial life and products like real estate, bonds, and stocks based on the customer risk tolerance."
+                        Analize the shared customer data to generate recommendations for the customer \
+                        Also recommend a healthier financial life and products like real estate, bonds, and stocks based on the customer risk tolerance." \
                 },
                 {
                     "role": "user", 
