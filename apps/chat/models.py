@@ -3,23 +3,7 @@ from typing import Optional, List
 from django.db import models
 from django.utils import timezone
 from apps.users.models import User
-import openai
-import logging
-from dataclasses import dataclass
-from dotenv import load_dotenv
-import os
-
-load_dotenv()
-
-openai.api_key = os.getenv("OPENAI_API_KEY")
-
-DEFAULT_SETTINGS = {
-    "max_tokens": 2000,
-    "top_p": 0.8,
-    "frequency_penalty": 0.5,
-    "presence_penalty": 0,
-    "temperature": 0.7,
-}
+from apps.chat.openai_service import OpenAIService
 
 class ChatSession(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -32,10 +16,10 @@ class ChatSession(models.Model):
         self.conversation_history.append(message)
         self.save()
 
-    def generate_response(self, prompt: str) -> Optional[str]:
+    def generate_response(self, prompt: str, openai_service: OpenAIService) -> Optional[str]:
         """Generates a response to the given prompt using the GPT-3 model."""
         system_message = {
-            "role": "system", 
+            "role": "system",
             "content": "You are a proficient financial advisor with expertise in financial matters and risk assessment in Kenya. \
                 Leverage your skills to respond to customer financial questions \
                 Generate tailored recommendations to enhance the customer's financial well-being. \
@@ -47,28 +31,9 @@ class ChatSession(models.Model):
         }
         user_messages = [{"role": "user", "content": msg} for msg in self.conversation_history if msg]
         user_messages.append({"role": "user", "content": prompt})
-
-        # The messages list
         messages = [system_message] + user_messages
 
-        try:
-            response = openai.ChatCompletion.create(
-                model="gpt-3.5-turbo-0613",
-                messages=messages,
-                max_tokens=DEFAULT_SETTINGS["max_tokens"],
-                temperature=DEFAULT_SETTINGS["temperature"],
-            )
-
-            model_response = response["choices"][0]["message"]["content"].strip()
-            return model_response
-
-        except openai.error.OpenAIError as e:
-            logging.error(f"OpenAI API error: {e}")
-            return None
-
-        except Exception as e:
-            logging.error(f"Unexpected error: {e}")
-            return None
+        return openai_service.generate_chat_response(messages)
 
     def save_chat_session(self) -> None:
         """Saves the chat session to the database."""
@@ -92,15 +57,16 @@ class ChatSession(models.Model):
 class ChatMessage(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     id = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
-    timestamp = models.DateTimeField(default=timezone.now, editable=False)
-    user_message = models.TextField()  # user's query - outgoing
-    model_response = models.TextField(null=True, blank=True)  # Model's response to user -- incoming
+    timestamp = models.DateTimeField(auto_now_add=True, editable=False)
+    user_message = models.TextField()
+    model_response = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return f'{self.user}: {self.user_message}'
 
-    class Meta:
-        ordering = ['-timestamp']
-        verbose_name = 'Chat Message'
-        verbose_name_plural = 'Chat Messages'
+    def __init__(self, user, user_message, model_response=None, *args, **kwargs):
+        super(ChatMessage, self).__init__(*args, **kwargs)
+        self.user = user
+        self.user_message = user_message
+        self.model_response = model_response
 

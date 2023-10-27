@@ -15,12 +15,12 @@ import os
 from typing import List
 
 # from decouple import config
-# from dotenv import load_dotenv
+from dotenv import load_dotenv
 import dj_database_url
 
 
 # Load environment variables
-# load_dotenv()
+load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -29,7 +29,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # SECRET_KEY = os.getenv('SECRET_KEY')
-SECRET_KEY = 'Chalo'
+SECRET_KEY = 'Hello'
+
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+
+DEFAULT_SETTINGS = {
+    "max_tokens": 500,
+    "top_p": 0.8,
+    "frequency_penalty": 0.5,
+    "presence_penalty": 0,
+    "temperature": 0.7,
+}
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = os.getenv('DEBUG')
@@ -73,11 +83,13 @@ MIDDLEWARE = [
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
-    "django.middleware.csrf.CsrfViewMiddleware",
+    "apps.chat.middleware.ChatSessionMiddleware",
+    # "django.middleware.csrf.CsrfViewMiddleware",  
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
 
 ROOT_URLCONF = "a2svhackathon.urls"
 
@@ -109,24 +121,24 @@ ASGI_APPLICATION = "a2svhackathon.asgi.application"
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': os.getenv("DB_NAME"),
-#         'USER': os.getenv("DB_USER"),
-#         'PASSWORD': os.getenv("DB_PASSWORD"),
-#         'HOST': os.getenv("DB_HOST"),
-#         'PORT': os.getenv("DB_PORT"),
+#         'NAME': os.environ.get("DB_NAME"),
+#         'USER': os.environ.get("DB_USER"),
+#         'PASSWORD': os.environ.get("DB_PASSWORD"),
+#         'HOST': os.environ.get("DB_HOST"),
+#         'PORT': os.environ.get("DB_PORT"),
 #     }
 # }
 
 # For Production
-db_url='postgres://Chalo1996:mUnu3fcIH0Zx@ep-crimson-meadow-52487780.us-east-2.aws.neon.tech/neondb'
-
-DATABASES = {
-    'default': dj_database_url.config(default=db_url)
-}
+# db_url=''
 
 # DATABASES = {
-#     'default': dj_database_url.config(default=os.getenv("DATABASE_URL"))
+#     'default': dj_database_url.config(default=db_url)
 # }
+
+DATABASES = {
+    'default': dj_database_url.config(default=os.getenv("DATABASE_URL"))
+}
 
 
 # Password validation
@@ -172,6 +184,8 @@ REST_FRAMEWORK = {
         "rest_framework.renderers.JSONRenderer",
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ],
     "DEFAULT_PARSER_CLASSES": [
@@ -193,10 +207,9 @@ SIMPLE_JWT = {
 }
 
 # Session handling
-
-SESSION_ENGINE = "django.contrib.sessions.backends.db"
-# SESSION_COOKIE_NAME = os.getenv("SESSION_COOKIE_NAME")
-SESSION_COOKIE_AGE = 3600  # Set the session timeout (in seconds)
+SESSION_ENGINE = "django.contrib.sessions.backends.db"  # Use the database-backed session engine
+SESSION_COOKIE_NAME = "your_session_cookie_name"  # Set a custom name for your session cookie
+SESSION_COOKIE_AGE = 3600  # Set the session timeout (in seconds), here it's 1 hour
 SESSION_SAVE_EVERY_REQUEST = True  # Save the session on every request
 
 
@@ -211,6 +224,7 @@ SWAGGER_SETTINGS = {
     }
 }
 
+# LOGIN_URL = 'auth/'
 
 # Logger configuration
 
