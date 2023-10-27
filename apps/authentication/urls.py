@@ -6,6 +6,7 @@ from .views import (
     ForgotPassword,
     MyTokenObtainPairView,
 )
+app_name = 'authentication'
 
 urlpatterns = [
     path("sign-in/", MyTokenObtainPairView.as_view(), name="sign-in"),

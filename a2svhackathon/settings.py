@@ -236,11 +236,10 @@ SWAGGER_SETTINGS = {
 
 # CORS settings
 CORS_ALLOWED_ORIGINS: List[str] = [
-    "https://a2svhackathon-e41ece5c505d.herokuapp.com/",
-    "https://a2sv-hackathon-xi.vercel.app/",
-    "https://fininfo.vercel.app/",
+    "https://a2svhackathon-e41ece5c505d.herokuapp.com",
+    "https://a2sv-hackathon-xi.vercel.app",
     "https://fininfo.vercel.app",
-]
+    ]
 CORS_ALLOWED_ORIGIN_REGEXES: List[str] = [
     r"^(http?:\/\/)?((localhost)|(127\.0\.0\.1)):3\d{3}",
     r"^(http?:\/\/)?((localhost)|(127\.0\.0\.1)):5\d{3}",

@@ -1,7 +1,7 @@
 from django.urls import path
-from .views import ChatMessageListCreateView, ChatMessageDetailView
+from .api_views import ChatSessionListCreateView, ChatMessageListCreateView
 
 urlpatterns = [
-    path('api/chat-messages/', ChatMessageListCreateView.as_view(), name='chat-message-list'),
-    path('api/chat-messages/<int:pk>/', ChatMessageDetailView.as_view(), name='chat-message-detail'),
+    path('chat-sessions/', ChatSessionListCreateView.as_view(), name='chat-session-list-create'),
+    path('chat-messages/', ChatMessageListCreateView.as_view(), name='chat-message-list-create'),
 ]

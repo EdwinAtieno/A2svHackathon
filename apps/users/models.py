@@ -105,7 +105,8 @@ class User(AbstractBaseUser, PermissionsMixin, IDModel, TimeStampedModel):
         ordering = ["-created_at"]
 
     def __str__(self) -> str:
-        return f"{self.first_name} {self.last_name} - {self.phone_number}"
+        # return f"{self.first_name} {self.last_name} - {self.phone_number}"
+        return f"{self.id}"
 
     def get_full_name(self) -> str:
         return f"{self.first_name or ''} {self.middle_name or ''} {self.last_name or ''}"
