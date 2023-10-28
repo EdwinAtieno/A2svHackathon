@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # from django.contrib.auth.decorators import login_required
 # from rest_framework.decorators import api_view, authentication_classes, permission_classes
 # from rest_framework.response import Response
@@ -47,3 +48,22 @@
 
 #     except Exception as e:
 #         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+=======
+from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
+from .models import ChatMessage
+from .serializers import ChatMessageSerializer
+
+class ChatMessageListCreateView(generics.ListCreateAPIView):
+    queryset = ChatMessage.objects.all()
+    serializer_class = ChatMessageSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+class ChatMessageDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = ChatMessage.objects.all()
+    serializer_class = ChatMessageSerializer
+    permission_classes = [IsAuthenticated] 
+>>>>>>> 75c18a1 (feat profiles)

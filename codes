@@ -1,0 +1,39 @@
+{
+    "income": [
+        {
+            "income": "",
+            "source": "salary",
+            "amount": "100000",
+            "frequency": "monthly"
+        },
+        {
+            "source": "allowances",
+            "amount": "20000",
+            "frequency": "monthly"
+        }
+    ],
+    "expenses": [
+        {
+            "expenses": "",
+            "category": "bills",
+            "amount": "30000"
+        },
+        {
+            "category": "emergency",
+            "amount": "10000"
+        }
+    ],
+    "savings": [
+        {
+            "savings": "",
+            "type": "school",
+            "amount": "8000"
+        }
+    ],
+    "goals": [
+        {
+            "goals": "",
+            "description": "buy house",
+            "target": "2000000"
+ }]
+}
