@@ -16,7 +16,7 @@ from typing import List
 
 # from decouple import config
 # from dotenv import load_dotenv
-# import dj_database_url
+import dj_database_url
 
 
 # Load environment variables
@@ -140,11 +140,11 @@ ASGI_APPLICATION = "a2svhackathon.asgi.application"
 #     'default': dj_database_url.config(default=db_url)
 # }
 
-dburl='postgres://Chalo1996:mUnu3fcIH0Zx@ep-crimson-meadow-52487780.us-east-2.aws.neon.tech/neondb'
+db_url='postgres://Chalo1996:mUnu3fcIH0Zx@ep-crimson-meadow-52487780.us-east-2.aws.neon.tech/neondb'
 
 # Prod
 DATABASES = {
-    'default': dburl
+    'default': dj_database_url.config(default=db_url)
 }
 
 # Local Dev
