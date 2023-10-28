@@ -136,6 +136,7 @@ ASGI_APPLICATION = "a2svhackathon.asgi.application"
 #     'default': dj_database_url.config(default=db_url)
 # }
 
+
 DATABASES = {
     'default': dj_database_url.config(default=os.getenv("DATABASE_URL"))
 }
