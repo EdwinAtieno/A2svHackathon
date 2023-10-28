@@ -15,12 +15,12 @@ import os
 from typing import List
 
 # from decouple import config
-from dotenv import load_dotenv
-import dj_database_url
+# from dotenv import load_dotenv
+# import dj_database_url
 
 
 # Load environment variables
-load_dotenv()
+# load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -31,7 +31,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECRET_KEY = os.getenv('SECRET_KEY')
 SECRET_KEY = 'Hello'
 
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+# Prod
+
+OPENAI_API_KEY = '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'
+
+# OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 DEFAULT_SETTINGS = {
     "max_tokens": 500,
@@ -84,7 +88,7 @@ MIDDLEWARE = [
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "apps.chat.middleware.ChatSessionMiddleware",
-    # "django.middleware.csrf.CsrfViewMiddleware",  
+    # "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
@@ -136,9 +140,18 @@ ASGI_APPLICATION = "a2svhackathon.asgi.application"
 #     'default': dj_database_url.config(default=db_url)
 # }
 
+dburl='postgres://Chalo1996:mUnu3fcIH0Zx@ep-crimson-meadow-52487780.us-east-2.aws.neon.tech/neondb'
+
+# Prod
 DATABASES = {
-    'default': dj_database_url.config(default=os.getenv("DATABASE_URL"))
+    'default': dburl
 }
+
+# Local Dev
+
+# DATABASES = {
+#     'default': dj_database_url.config(default=os.getenv("DATABASE_URL"))
+# }
 
 
 # Password validation
@@ -253,10 +266,13 @@ CORS_ALLOWED_ORIGINS: List[str] = [
     "https://a2svhackathon-e41ece5c505d.herokuapp.com",
     "https://a2sv-hackathon-xi.vercel.app",
     "https://fininfo.vercel.app",
-    ]
+    "https://fininfo.vercel.app/",
+]
+
 CORS_ALLOWED_ORIGIN_REGEXES: List[str] = [
     r"^(http?:\/\/)?((localhost)|(127\.0\.0\.1)):3\d{3}",
     r"^(http?:\/\/)?((localhost)|(127\.0\.0\.1)):5\d{3}",
     "*"
 ]
+
 CORS_URLS_REGEX = r"^/api/.*$"
