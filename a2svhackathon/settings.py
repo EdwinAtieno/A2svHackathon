@@ -137,7 +137,7 @@ ASGI_APPLICATION = "a2svhackathon.asgi.application"
 # }
 
 # For Production
-db_url='postgres://Chalo1996:9Rt7YbVmWufQ@ep-winter-wildflower-28193234.us-east-2.aws.neon.tech/a2sv'
+db_url='postgres://Chalo1996:9Rt7YbVmWufQ@ep-winter-wildflower-28193234.us-east-2.aws.neon.tech/a2svdb'
 
 # Prod
 DATABASES = {
