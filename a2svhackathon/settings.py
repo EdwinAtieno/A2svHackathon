@@ -14,7 +14,7 @@ from pathlib import Path
 import os
 from typing import List
 
-# from decouple import config
+from decouple import config
 # from dotenv import load_dotenv
 import dj_database_url
 
@@ -33,7 +33,8 @@ SECRET_KEY = 'Hello'
 
 # Prod
 
-OPENAI_API_KEY = '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'
+# OPENAI_API_KEY = config(OPENAI_API_KEY)
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 # OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
