@@ -1,3 +1,4 @@
+
 """
 Django settings for a2svhackathon project.
 
@@ -71,6 +72,7 @@ INSTALLED_APPS = [
     # ThirdParty
     "channels",
     "apps.chat",
+    "apps.profiles",
     "apps.users",
     "apps.authentication",
 ]
@@ -260,3 +262,4 @@ CORS_ALLOWED_ORIGIN_REGEXES: List[str] = [
     "*"
 ]
 CORS_URLS_REGEX = r"^/api/.*$"
+
