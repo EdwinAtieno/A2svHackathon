@@ -35,7 +35,8 @@ SECRET_KEY = 'Hello'
 # Prod
 
 # OPENAI_API_KEY = config(OPENAI_API_KEY)
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")\
+      if "OPENAI_API_KEY" in os.environ else config("OPENAI_API_KEY")
 
 # OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
