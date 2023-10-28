@@ -132,15 +132,15 @@ ASGI_APPLICATION = "a2svhackathon.asgi.application"
 # }
 
 # For Production
-# db_url=''
-
-# DATABASES = {
-#     'default': dj_database_url.config(default=db_url)
-# }
+db_url='postgres://Chalo1996:mUnu3fcIH0Zx@ep-crimson-meadow-52487780.us-east-2.aws.neon.tech/neondb'
 
 DATABASES = {
-    'default': dj_database_url.config(default=os.getenv("DATABASE_URL"))
+    'default': dj_database_url.config(default=db_url)
 }
+
+# DATABASES = {
+#     'default': dj_database_url.config(default=os.getenv("DATABASE_URL"))
+# }
 
 
 # Password validation
@@ -262,7 +262,3 @@ CORS_ALLOWED_ORIGIN_REGEXES: List[str] = [
     "*"
 ]
 CORS_URLS_REGEX = r"^/api/.*$"
-<<<<<<< HEAD
-=======
-
->>>>>>> b8850a88e867fbc4218a3b049933cbd1d8d0118e

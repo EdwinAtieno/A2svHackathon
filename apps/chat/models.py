@@ -1,5 +1,5 @@
-<<<<<<< HEAD
-import uuid 
+import uuid
+import logging
 from typing import Optional, List
 from django.db import models
 from django.utils import timezone
@@ -47,7 +47,7 @@ class ChatSession(models.Model):
     def load_chat_session(cls, user_id: str) -> Optional['ChatSession']:
         """Loads a chat session from the database."""
         try:
-            chat_session = cls.objects.get(user_id=user_id)
+            chat_session = cls.objects.get(user__id=user_id)
             return chat_session
         except cls.DoesNotExist:
             return None
@@ -64,50 +64,3 @@ class ChatMessage(models.Model):
 
     def __str__(self):
         return f'{self.user}: {self.user_message}'
-
-    def __init__(self, user, user_message, model_response=None, *args, **kwargs):
-        super(ChatMessage, self).__init__(*args, **kwargs)
-        self.user = user
-        self.user_message = user_message
-        self.model_response = model_response
-
-=======
-from django.db import models
-from django.utils import timezone
-from apps.users.models import User
-
-class ChatMessage(models.Model):
-    """Stores user chat history"""
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    timestamp = models.DateTimeField(default=timezone.now, editable=False)
-    user_message = models.TextField()  # user's query - outgoing
-    model_response = models.TextField()  # Model's response - incoming
-
-    def __str__(self):
-        return f'{self.user}: {self.user_message}'
-
-    class Meta:
-        ordering = ['-timestamp']
-        verbose_name = 'Chat Message'
-        verbose_name_plural = 'Chat Messages'
-
-    @classmethod
-    def store_chat_history(cls, user, user_message, model_response):
-        """
-        Stores chat history for the user.
-        """
-        chat_message = cls.objects.create(
-            user=user,
-            user_message=user_message,
-            model_response=model_response
-        )
-        return chat_message
-
-    @classmethod
-    def get_user_chat_history(cls, user):
-        """
-        Retrieves chat history for a specific user.
-        """
-        chat_history = cls.objects.filter(user=user)
-        return chat_history
->>>>>>> 75c18a1 (feat profiles)

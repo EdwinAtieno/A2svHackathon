@@ -14,7 +14,7 @@ class Profiles(models.Model):
 
 class Income(models.Model):
     income = models.CharField(max_length=100)
-    profile = models.ForeignKey(Profiles, on_delete=models.PROTECT)
+    profile = models.ForeignKey(Profiles, on_delete=models.PROTECT, default=list)
     source = models.CharField(max_length=100)
     amount = models.IntegerField()
     frequency = models.CharField(max_length=100)
@@ -25,7 +25,7 @@ class Income(models.Model):
 
 class Expense(models.Model):
     expense = models.CharField(max_length=100)
-    profile = models.ForeignKey(Profiles, on_delete=models.PROTECT)
+    profile = models.ForeignKey(Profiles, on_delete=models.PROTECT, default=list)
     amount = models.IntegerField()
     category = models.CharField(max_length=100)
 
@@ -35,7 +35,7 @@ class Expense(models.Model):
 
 class Savings(models.Model):
     savings = models.CharField(max_length=100)
-    profile = models.ForeignKey(Profiles, on_delete=models.PROTECT)
+    profile = models.ForeignKey(Profiles, on_delete=models.PROTECT, default=list)
     amount = models.IntegerField()
     type = models.CharField(max_length=100)
 
@@ -45,7 +45,7 @@ class Savings(models.Model):
 
 class Goals(models.Model):
     goals = models.CharField(max_length=100)
-    profile = models.ForeignKey(Profiles, on_delete=models.PROTECT)
+    profile = models.ForeignKey(Profiles, on_delete=models.PROTECT, default=list)
     description = models.CharField(max_length=10000)
     target = models.IntegerField()
 

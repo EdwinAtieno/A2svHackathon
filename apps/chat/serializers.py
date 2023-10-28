@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 from rest_framework import serializers
 from .models import ChatSession, ChatMessage
 
@@ -26,12 +25,3 @@ class ChatSessionSerializer(serializers.ModelSerializer):
         instance.save()
 
         return instance
-=======
-from rest_framework import serializers
-from .models import ChatMessage
-
-class ChatMessageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ChatMessage
-        fields = '__all__'
->>>>>>> 75c18a1 (feat profiles)
