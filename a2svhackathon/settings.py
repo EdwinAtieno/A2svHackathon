@@ -15,12 +15,12 @@ import os
 from typing import List
 
 from decouple import config
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 import dj_database_url
 
 
 # Load environment variables
-load_dotenv()
+# load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -75,6 +75,7 @@ INSTALLED_APPS = [
     "apps.users",
     "apps.authentication",
     "apps.profiles",
+    "openai",
 ]
 
 AUTH_USER_MODEL = "users.User"
@@ -86,7 +87,7 @@ MIDDLEWARE = [
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "apps.chat.middleware.ChatSessionMiddleware",
-    # "django.middleware.csrf.CsrfViewMiddleware",  
+    # "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
