@@ -4,11 +4,16 @@ import logging
 
 
 class OpenAIService:
-    def __init__(self):
-        self.api_key = settings.OPENAI_API_KEY
+    def __init__(self, api_key=settings.OPENAI_API_KEY):
+        self.api_key = api_key
 
-    def generate_chat_response(self, messages):
+    def generate_chat_response(self, messages, context=None):
         try:
+            if context:
+                for message in messages:
+                    if "role" in message and message["role"] == "system":
+                        message["content"] = self.update_system_message(message["content"], context)
+
             response = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo-0613",
                 messages=messages,
@@ -23,3 +28,10 @@ class OpenAIService:
         except Exception as e:
             logging.exception(f"Unexpected error: {e}")
             return None
+
+    def update_system_message(self, system_message, context):
+        if "user_goals" in context:
+            goals = ", ".join(context["user_goals"])
+            system_message = system_message.replace("{user_goals}", goals)
+
+        return system_message
