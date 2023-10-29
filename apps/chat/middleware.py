@@ -1,4 +1,3 @@
-# middleware.py
 from .models import ChatSession
 
 class ChatSessionMiddleware:
@@ -8,9 +7,10 @@ class ChatSessionMiddleware:
     def __call__(self, request):
         if hasattr(request, 'user') and request.user.is_authenticated:
             user = request.user
-            chat_session, created = ChatSession.objects.get_or_create(user=user)
-            if created:
-                chat_session.save()
+            chat_session = ChatSession.load_chat_session(user_id=user.id)
+
+            if not chat_session:
+                chat_session = ChatSession.objects.create(user=user)
 
             request.chat_session = chat_session
 

@@ -14,7 +14,7 @@ from pathlib import Path
 import os
 from typing import List
 
-# from decouple import config
+from decouple import config
 from dotenv import load_dotenv
 import dj_database_url
 
@@ -28,10 +28,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = os.getenv('SECRET_KEY')
-SECRET_KEY = 'Hello'
+SECRET_KEY = os.getenv('SECRET_KEY') if "SECRET_KEY" \
+    in os.environ["SECRET_KEY"] else config("SECRET_KEY")
 
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY") if "OPENAI_API_KEY" \
+    in os.environ["OPENAI_API_KEY"] else config("OPENAI_API_KEY")
 
 DEFAULT_SETTINGS = {
     "max_tokens": 500,
@@ -42,8 +43,8 @@ DEFAULT_SETTINGS = {
 }
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = os.getenv('DEBUG')
-DEBUG = True
+DEBUG = os.getenv('DEBUG') if "DEBUG" in os.environ["DEBUG"] \
+    else config("DEBUG")
 
 ALLOWED_HOSTS = [
     "127.0.0.1",
@@ -73,6 +74,7 @@ INSTALLED_APPS = [
     "apps.chat",
     "apps.users",
     "apps.authentication",
+    "apps.profiles",
 ]
 
 AUTH_USER_MODEL = "users.User"
@@ -138,7 +140,8 @@ ASGI_APPLICATION = "a2svhackathon.asgi.application"
 
 
 DATABASES = {
-    'default': dj_database_url.config(default=os.getenv("DATABASE_URL"))
+    'default': dj_database_url.config(default=os.getenv("DATABASE_URL") if "DATABASE_URL" \
+        in os.environ["DATABASE_URL"] else config("DATABASE_URL"))
 }
 
 
