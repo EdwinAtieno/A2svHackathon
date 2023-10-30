@@ -29,10 +29,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY') if "SECRET_KEY" \
-    in os.environ["SECRET_KEY"] else config("SECRET_KEY")
+   in os.environ["SECRET_KEY"] else config("SECRET_KEY")
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY") if "OPENAI_API_KEY" \
-    in os.environ["OPENAI_API_KEY"] else config("OPENAI_API_KEY")
+   in os.environ["OPENAI_API_KEY"] else config("OPENAI_API_KEY")
+
+# SECRET_KEY = os.getenv("SECRET_KEY")
+# OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 DEFAULT_SETTINGS = {
     "max_tokens": 500,
@@ -86,8 +89,8 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    "django.middleware.common.CommonMiddleware",
     "apps.chat.middleware.ChatSessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
     # "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
@@ -133,6 +136,12 @@ ASGI_APPLICATION = "a2svhackathon.asgi.application"
 #     }
 # }
 
+# Development
+
+
+# DATABASES = {
+#     'default': dj_database_url.config(default=os.getenv("DATABASE_URL"))
+#     }
 
 # Prod
 
