@@ -1,36 +1,23 @@
 from django.contrib import admin
-from apps.profiles.models import Profiles, Income, Expense, Savings, Goals
+from .models import Income, Expenses, Savings, Goals, UserProfile
 
+@admin.register(Income)
+class IncomeAdmin(admin.ModelAdmin):
+    list_display = ('user', 'source', 'amount', 'frequency')
 
-# Register your models here.
+@admin.register(Expenses)
+class ExpensesAdmin(admin.ModelAdmin):
+    list_display = ('user', 'category', 'amount')
 
-class IncomeListInline(admin.TabularInline):
-    model = Income
-    extra = 0
+@admin.register(Savings)
+class SavingsAdmin(admin.ModelAdmin):
+    list_display = ('user', 'type', 'amount')
 
+@admin.register(Goals)
+class GoalsAdmin(admin.ModelAdmin):
+    list_display = ('user', 'description', 'target')
 
-class ExpenseListInline(admin.TabularInline):
-    model = Expense
-    extra = 0
-
-
-class SavingsListInline(admin.TabularInline):
-    model = Savings
-    extra = 0
-
-
-class GoalsListInline(admin.TabularInline):
-    model = Goals
-    extra = 0
-
-
-class ProfilesAdmin(admin.ModelAdmin):
-    model = Profiles
-    inlines = [IncomeListInline, ExpenseListInline, SavingsListInline, GoalsListInline]
-    list_display = (
-        "id",
-        "user",
-    )
-
-
-admin.site.register(Profiles, ProfilesAdmin)
+@admin.register(UserProfile)
+class UserProfileAdmin(admin.ModelAdmin):
+    list_display = ('user',)
+    filter_horizontal = ('income', 'expenses', 'savings', 'goals')

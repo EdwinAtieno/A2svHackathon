@@ -1,57 +1,39 @@
-from django.shortcuts import render
-from apps.profiles.models import Income, Expense, Savings, Goals, Profiles
-from apps.profiles.serializers import IncomeSerializer, ExpenseSerializer, SavingsSerializer, GoalsSerializer, \
-    ProfilesSerializer
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework import generics
+from .models import Income, Expenses, Savings, Goals, UserProfile
+from .serializers import IncomeSerializer, ExpensesSerializer, SavingsSerializer, GoalsSerializer, UserProfileSerializer
 
-
-# Create your views here.
-
-class IncomeList(ListCreateAPIView):
+class IncomeListCreateView(generics.ListCreateAPIView):
     queryset = Income.objects.all()
     serializer_class = IncomeSerializer
 
-
-class IncomeDetail(RetrieveUpdateDestroyAPIView):
+class IncomeDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Income.objects.all()
     serializer_class = IncomeSerializer
 
+class ExpensesListCreateView(generics.ListCreateAPIView):
+    queryset = Expenses.objects.all()
+    serializer_class = ExpensesSerializer
 
-class ExpenseList(ListCreateAPIView):
-    queryset = Expense.objects.all()
-    serializer_class = ExpenseSerializer
+class ExpensesDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Expenses.objects.all()
+    serializer_class = ExpensesSerializer
 
-
-class ExpenseDetail(RetrieveUpdateDestroyAPIView):
-    queryset = Expense.objects.all()
-    serializer_class = ExpenseSerializer
-
-
-class SavingsList(ListCreateAPIView):
+class SavingsListCreateView(generics.ListCreateAPIView):
     queryset = Savings.objects.all()
     serializer_class = SavingsSerializer
 
-
-class SavingsDetail(RetrieveUpdateDestroyAPIView):
+class SavingsDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Savings.objects.all()
     serializer_class = SavingsSerializer
 
-
-class GoalsList(ListCreateAPIView):
+class GoalsListCreateView(generics.ListCreateAPIView):
     queryset = Goals.objects.all()
     serializer_class = GoalsSerializer
 
-
-class GoalsDetail(RetrieveUpdateDestroyAPIView):
+class GoalsDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Goals.objects.all()
     serializer_class = GoalsSerializer
 
-
-class ProfilesList(ListCreateAPIView):
-    queryset = Profiles.objects.all()
-    serializer_class = ProfilesSerializer
-
-
-class ProfilesDetail(RetrieveUpdateDestroyAPIView):
-    queryset = Profiles.objects.all()
-    serializer_class = ProfilesSerializer
+class UserProfileView(generics.RetrieveAPIView):
+    queryset = UserProfile.objects.all()
+    serializer_class = UserProfileSerializer

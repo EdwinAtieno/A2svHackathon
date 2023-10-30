@@ -75,6 +75,7 @@ INSTALLED_APPS = [
     "apps.users",
     "apps.authentication",
     "apps.profiles",
+    "apps.recommendations",
     "openai",
 ]
 
@@ -132,13 +133,8 @@ ASGI_APPLICATION = "a2svhackathon.asgi.application"
 #     }
 # }
 
-# For Production
-# db_url=''
 
-# DATABASES = {
-#     'default': dj_database_url.config(default=db_url)
-# }
-
+Prod
 
 DATABASES = {
     'default': dj_database_url.config(default=os.getenv("DATABASE_URL") if "DATABASE_URL" \
