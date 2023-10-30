@@ -15,12 +15,12 @@ import os
 from typing import List
 
 from decouple import config
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 import dj_database_url
 
 
 # Load environment variables
-load_dotenv()
+# load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -122,24 +122,24 @@ ASGI_APPLICATION = "a2svhackathon.asgi.application"
 
 # For Local Production
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ.get("DB_NAME"),
-        'USER': os.environ.get("DB_USER"),
-        'PASSWORD': os.environ.get("DB_PASSWORD"),
-        'HOST': os.environ.get("DB_HOST"),
-        'PORT': os.environ.get("DB_PORT"),
-    }
-}
-
-
-# Prod
-
 # DATABASES = {
-#     'default': dj_database_url.config(default=os.getenv("DATABASE_URL") if "DATABASE_URL" \
-#         in os.environ["DATABASE_URL"] else config("DATABASE_URL"))
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': os.environ.get("DB_NAME"),
+#         'USER': os.environ.get("DB_USER"),
+#         'PASSWORD': os.environ.get("DB_PASSWORD"),
+#         'HOST': os.environ.get("DB_HOST"),
+#         'PORT': os.environ.get("DB_PORT"),
+#     }
 # }
+
+
+Prod
+
+DATABASES = {
+    'default': dj_database_url.config(default=os.getenv("DATABASE_URL") if "DATABASE_URL" \
+        in os.environ["DATABASE_URL"] else config("DATABASE_URL"))
+}
 
 
 # Password validation
