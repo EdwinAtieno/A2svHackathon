@@ -12,6 +12,7 @@ class ChatSession(models.Model):
     id = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
     conversation_history = models.JSONField(default=list)
     created_at = models.DateTimeField(default=timezone.now)
+    last_activity = models.DateTimeField(default=timezone.now)
 
     def add_message(self, message: str) -> None:
         """Adds a message to the conversation history."""
@@ -60,7 +61,7 @@ class ChatSession(models.Model):
 
     def extract_goals_from_prompt(self, prompt: str) -> List[str]:
         goals_keywords = ["save", "invest", "plan", "budget", "education", "mortgage", "financial freedom", "retirement", "wealth", "savings", "income", "assets", "expenses", "emergency fund", "debt", "real estate", "passive income", "insurance", "tax planning"]
-        prompt_tokens = re.findall(r'\b\w+\b', prompt.lower()) # tokenize prompt
+        prompt_tokens = re.findall(r'\b\w+\b', prompt.lower())  # tokenize prompt
         extracted_goals = [goal for goal in goals_keywords if goal in prompt_tokens]
 
         return extracted_goals
@@ -69,15 +70,18 @@ class ChatSession(models.Model):
         """Get or initialize the conversation context."""
         if not self.conversation_history:
             return {}
-        
+
         last_message = self.conversation_history[-1]
-        if "context" in last_message:
+
+        if isinstance(last_message, dict) and "context" in last_message:
             return last_message["context"]
         else:
             return {}
 
+
     def save_chat_session(self) -> None:
         """Saves the chat session to the database."""
+        self.last_activity = timezone.now() # update last activity on save
         try:
             self.save()
         except models.Model.DoesNotExist:
@@ -86,19 +90,15 @@ class ChatSession(models.Model):
             logging.error(f"Database error: {e}")
 
     @classmethod
-    def load_chat_session(cls, user_id: str) -> Optional['ChatSession']:
-        """Loads the latest chat session for the user from the database."""
+    def load_chat_session(cls, user: str) -> Optional['ChatSession']:
+        """Load the latest chat session for a user."""
         try:
-            chat_sessions = cls.objects.filter(user_id=user_id).order_by('-created_at')
-            if chat_sessions.exists():
-                return chat_sessions.first()
-            else:
-                return None
+            chat_sessions = cls.objects.filter(user=user).order_by('-created_at')
+            return chat_sessions.first() if chat_sessions.exists() else None
         except cls.DoesNotExist:
             return None
         except Exception as e:
             logging.error(f"Database error: {e}")
-
 
 class ChatMessage(models.Model):
     ROLE_CHOICES = [
@@ -115,7 +115,7 @@ class ChatMessage(models.Model):
     role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='user')
 
     def __str__(self):
-        return f'{self.get_role_display()} ({self.user}) at {self.timestamp}: {self.user_message}'
+        return f'{self.get_role_display()} ({self.user}) at {self.timestamp}: {self.user_message}\nResponse: {self.model_response}'
 
     def add_message(self, role: str, content: str) -> None:
         """Adds a message to the conversation using the latest session."""

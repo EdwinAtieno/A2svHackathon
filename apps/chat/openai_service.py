@@ -2,7 +2,6 @@ from django.conf import settings
 import openai
 import logging
 
-
 class OpenAIService:
     def __init__(self, api_key=settings.OPENAI_API_KEY):
         self.api_key = api_key
@@ -23,11 +22,11 @@ class OpenAIService:
             model_response = response["choices"][0]["message"]["content"]
             return model_response
         except openai.error.OpenAIError as e:
-            logging.error(f"OpenAI API error: {e}")
-            return None
+            logging.exception(f"OpenAI API error: {e}")
+            raise OpenAIError(f"OpenAI API error: {e}") from e
         except Exception as e:
             logging.exception(f"Unexpected error: {e}")
-            return None
+            raise
 
     def update_system_message(self, system_message, context):
         if "user_goals" in context:

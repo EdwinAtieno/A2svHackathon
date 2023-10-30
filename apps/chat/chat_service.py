@@ -1,7 +1,6 @@
-from django.conf import settings
-import openai
+from django.db import DatabaseError
+from openai.error import OpenAIError
 import logging
-from apps.chat.openai_service import OpenAIService
 from .models import ChatSession, ChatMessage
 
 class ChatService:
@@ -22,6 +21,12 @@ class ChatService:
             chat_session.add_message(llm_response)
             chat_session.save()
             return chat_message
+        except DatabaseError as e:
+            logging.exception(f"Database error: {e}")
+            raise DatabaseError(f"Database error: {e}") from e
+        except OpenAIError as e:
+            logging.exception(f"OpenAI error: {e}")
+            raise OpenAIError(f"OpenAI error: {e}") from e
         except Exception as e:
-            logging.error(f"Error in processing user message: {e}")
-            return None
+            logging.exception(f"Unexpected error: {e}")
+            raise
