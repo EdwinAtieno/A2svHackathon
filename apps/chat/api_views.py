@@ -12,6 +12,24 @@ class ChatSessionListCreateView(generics.ListCreateAPIView):
     queryset = ChatSession.objects.all()
     serializer_class = ChatSessionSerializer
 
+    def create(self, request, *args, **kwargs):
+        try:
+            # Ensure the user is authenticated
+            if not request.user.is_authenticated:
+                return Response({"error": "Authentication required"}, status=status.HTTP_401_UNAUTHORIZED)
+
+            # Create a new chat session for the authenticated user
+            chat_session, created = ChatSession.objects.get_or_create(user=request.user)
+
+            serializer = ChatSessionSerializer(chat_session)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        except Exception as e:
+            # Log traceback for better debugging
+            logging.exception(f"Unexpected error: {e}")
+            return Response({"error": "Internal Server Error"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
 class ChatMessageListCreateView(generics.ListCreateAPIView):
     queryset = ChatMessage.objects.all()
     serializer_class = ChatMessageSerializer
