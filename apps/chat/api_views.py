@@ -33,6 +33,7 @@ class ChatSessionListCreateView(generics.ListCreateAPIView):
 class ChatMessageListCreateView(generics.ListCreateAPIView):
     queryset = ChatMessage.objects.all()
     serializer_class = ChatMessageSerializer
+    openai_service = OpenAIService() 
 
     def create(self, request, *args, **kwargs):
         try:
@@ -41,8 +42,7 @@ class ChatMessageListCreateView(generics.ListCreateAPIView):
             if not user_message:
                 return Response({"error": "user_message is required"}, status=status.HTTP_400_BAD_REQUEST)
 
-            openai_service = OpenAIService()
-            chat_message = ChatService.process_user_message(request.user, user_message, openai_service)
+            chat_message = ChatService.process_user_message(request.user, user_message, self.openai_service)
 
             if chat_message:
                 serializer = ChatMessageSerializer(chat_message)

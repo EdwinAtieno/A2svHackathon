@@ -3,8 +3,8 @@ import openai
 import logging
 
 class OpenAIService:
-    def __init__(self, api_key=settings.OPENAI_API_KEY):
-        self.api_key = api_key
+    def __init__(self, api_key=None):
+        self.api_key = api_key or settings.OPENAI_API_KEY
 
     def generate_chat_response(self, messages, context=None):
         try:
@@ -20,7 +20,7 @@ class OpenAIService:
                 temperature=settings.DEFAULT_SETTINGS["temperature"],
             )
             model_response = response["choices"][0]["message"]["content"]
-            return model_response
+            return model_response, response # include full API response
         except openai.error.OpenAIError as e:
             logging.exception(f"OpenAI API error: {e}")
             raise OpenAIError(f"OpenAI API error: {e}") from e

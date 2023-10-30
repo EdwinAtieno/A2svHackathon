@@ -14,14 +14,15 @@ class ChatSession(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     last_activity = models.DateTimeField(default=timezone.now)
 
-    def add_message(self, message: str) -> None:
+    def add_message(self, role: str, content: str) -> None:
         """Adds a message to the conversation history."""
+        message = {"role": role, "content": content}
         self.conversation_history.append(message)
         self.save()
 
-    def generate_response(self, prompt: str, openai_service: OpenAIService) -> Optional[str]:
-        """Generates a response to the given prompt using the GPT-3 model."""
-        is_finance_related = self.is_finance_related(prompt)
+    def generate_response(self, user_prompt: str, openai_service: OpenAIService) -> Optional[str]:
+        """Generates a response to the given user prompt using the GPT-3 model."""
+        is_finance_related = self.is_finance_related(user_prompt)
 
         if not is_finance_related:
             return "Hello, I am your financial assistant. If you have any finance-related questions, feel free to ask."
@@ -29,26 +30,29 @@ class ChatSession(models.Model):
         context = self.get_conversation_context()
 
         if "user_goals" not in context:
-            context["user_goals"] = self.extract_goals_from_prompt(prompt)
+            context["user_goals"] = self.extract_goals_from_prompt(user_prompt)
 
         system_message = {
             "role": "system",
             "content": f"You are a proficient financial advisor with expertise in financial matters and risk assessment in Kenya. "
-                    f"Leverage your skills to respond to customer financial questions. "
-                    f"Generate tailored recommendations to enhance the customer's financial well-being. "
-                    f"Provide insightful advice and guidance based on your financial expertise "
-                    f"and understanding of the unique needs and goals of the customer. "
-                    f"Do not respond to any question outside finance and banking. "
-                    f"You are also proficient in data governance, AML, and compliance. "
-                    f"Listen and understand user-specific goals & priorities. You have mentioned goals related to {', '.join(context.get('user_goals', []))}."
-                    f"If you have any specific questions or goals in mind, feel free to share, and I'll provide personalized assistance."
+                        f"Leverage your skills to respond to customer financial questions. "
+                        f"Generate tailored recommendations to enhance the customer's financial well-being. "
+                        f"Provide insightful advice and guidance based on your financial expertise "
+                        f"and understanding of the unique needs and goals of the customer. "
+                        f"Do not respond to any question outside finance and banking. "
+                        f"You are also proficient in data governance, AML, and compliance. "
+                        f"Listen and understand user-specific goals & priorities. You have mentioned goals related to {', '.join(context.get('user_goals', []))}."
+                        f"If you have any specific questions or goals in mind, feel free to share, and I'll provide personalized assistance."
         }
 
-        user_messages = [{"role": msg["role"], "content": msg["content"]} for msg in self.conversation_history if isinstance(msg, dict)]
-        user_messages.append({"role": "user", "content": prompt})
-        messages = [system_message] + user_messages
+        user_message = {"role": "user", "content": user_prompt}
+        model_response = openai_service.generate_chat_response([system_message, user_message])
 
-        return openai_service.generate_chat_response(messages)
+        # Add user and model messages to conversation history
+        self.add_message(user_message["role"], user_message["content"])
+        self.add_message("model", model_response)
+
+        return model_response
 
     def is_finance_related(self, query: str) -> bool:
         finance_keywords = [
