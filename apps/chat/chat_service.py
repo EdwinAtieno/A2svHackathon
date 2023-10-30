@@ -17,8 +17,8 @@ class ChatService:
                 user_message=user_message,
                 model_response=llm_response
             )
-            chat_session.add_message(user_message)
-            chat_session.add_message(llm_response)
+            chat_session.add_message(role="user", content=user_message)
+            chat_session.add_message(role="model", content=llm_response)
             chat_session.save()
             return chat_message
         except DatabaseError as e:
